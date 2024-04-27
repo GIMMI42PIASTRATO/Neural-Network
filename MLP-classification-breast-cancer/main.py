@@ -25,15 +25,17 @@ class BreastCancerClassifier:
         self.dataset = pd.read_csv(self.data_path)
 
     def prepare_data(self):
-        X = self.dataset.drop(["id", "diagnosis", "Unnamed: 32"], axis=1)  # Features
+        X = self.dataset.drop(["id", "diagnosis", "Unnamed: 32"], axis=1)
         print(X)
-        Y = self.dataset["diagnosis"]  # Target
+        Y = self.dataset["diagnosis"]
         Y = self.label_encoder.fit_transform(Y)
+        # Divide i dati in training e test
         self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(
             X, Y, test_size=0.25, random_state=42
         )
 
     def normalize_data(self):
+        # La normalizzazzione permette che le diverse features dei dati abbiano una scala simile, questo è importante per i modelli di Machine Learning perché ad esempio un algoritmo potrebbe dare più importanza a una feature che ha valori più grandi, anche se quella caratteristica non è effettivamente più importante.
         self.X_train = self.scaler.fit_transform(self.X_train)
         self.X_test = self.scaler.transform(self.X_test)
 
@@ -90,10 +92,8 @@ class BreastCancerClassifier:
 
 
 # Utilizzo della classe
-model_path = "MLP-classification-breast-cancer\models\\breast_cancer_model.joblib"
-classifier = BreastCancerClassifier(
-    "MLP-classification-breast-cancer\data\Cancer_Data.csv", model_path=model_path
-)
+model_path = ".\models\\breast_cancer_model.joblib"
+classifier = BreastCancerClassifier(".\data\Cancer_Data.csv", model_path=model_path)
 classifier.train_and_evaluate()
 classifier.save_model()
 
