@@ -61,11 +61,32 @@ class BreastCancerClassifier:
         decoded_predictions = self.label_encoder.inverse_transform(predictions)
         return decoded_predictions
 
+    # Metodi per salvare e caricare il modello
     def save_model(self):
         dump(self.model, self.model_path)
+        self.__save_scaler()
+        self.__save_label_encoder()
+
+    def __save_scaler(self):
+        scaler_path = self.model_path.replace(".joblib", "_scaler.joblib")
+        dump(self.scaler, scaler_path)
+
+    def __save_label_encoder(self):
+        label_encoder_path = self.model_path.replace(".joblib", "_label_encoder.joblib")
+        dump(self.label_encoder, label_encoder_path)
 
     def load_model(self):
         self.model = load(self.model_path)
+        self.__load_scaler()
+        self.__load_label_encoder()
+
+    def __load_scaler(self):
+        scaler_path = self.model_path.replace(".joblib", "_scaler.joblib")
+        self.scaler = load(scaler_path)
+
+    def __load_label_encoder(self):
+        label_encoder_path = self.model_path.replace(".joblib", "_label_encoder.joblib")
+        self.label_encoder = load(label_encoder_path)
 
 
 # Utilizzo della classe
